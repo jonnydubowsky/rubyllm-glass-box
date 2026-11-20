@@ -1,0 +1,18 @@
+{
+  "output": [
+    {
+      "type": "reasoning",
+      "summary": []
+    },
+    {
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "output_text",
+          "text": "Under a sky full of stars, a small unicorn learned that kindness shines brighter than any horn."
+        }
+      ]
+    }
+  ]
+}

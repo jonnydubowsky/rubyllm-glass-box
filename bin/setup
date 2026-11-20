@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Install gems and create a local .env if you do not have one.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+if ! command -v bundle >/dev/null 2>&1; then
+  gem install bundler
+fi
+
+bundle install
+
+if [[ ! -f .env ]]; then
+  cp .env.example .env
+  echo "Copied .env.example to .env. Keys are optional."
+fi
+
+mkdir -p tmp
+echo "Ready. Try: GLASS_BOX_MODE=offline bin/demo 02"

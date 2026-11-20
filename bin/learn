@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Walk the guided track.
+#   bin/learn           next checkpoint
+#   bin/learn status
+#   bin/learn 4         one step
+#   bin/learn run 4
+#   bin/learn auto      every step, approving tool calls
+#   bin/learn reset
+
+if ARGV.include?("auto")
+  ENV["GLASS_BOX_APPROVE"] = "yes" if ENV["GLASS_BOX_APPROVE"].to_s.strip.empty?
+end
+
+require_relative "../lib/glass_box/learn"
+
+command = ARGV[0]
+ok = case command
+     when nil, "next"
+       GlassBox::Learn.next!
+     when "status"
+       GlassBox::Learn.status
+       true
+     when "reset"
+       GlassBox::Learn.reset!
+       true
+     when "auto"
+       GlassBox::Learn.auto!
+     when "run"
+       GlassBox::Learn.run!(ARGV.fetch(1))
+     else
+       GlassBox::Learn.run!(command)
+     end
+
+exit(ok ? 0 : 1)

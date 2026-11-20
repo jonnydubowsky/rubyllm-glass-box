@@ -1,0 +1,21 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GLASS_BOX_MODE: offline
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          # ubuntu-latest no longer builds every 3.2 patch. "3.2" installs the
+          # newest 3.2.x on the runner. Gemfile accepts anything >= 3.2.3.
+          ruby-version: "3.2"
+          bundler-cache: true
+      - name: Offline test suite
+        run: bundle exec rake test

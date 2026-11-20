@@ -1,0 +1,105 @@
+# Fictional micro-drama companies for the workshop.
+# dimension_inputs are numbers this course assigns. The composite is computed
+# in lib/glass_box/sbpi.rb. Nothing here is a measured score of a real company.
+
+category_examples:
+  names:
+    - ReelShort
+    - DramaBox
+  note: Named only as examples of the micro-drama category. They are not rows in this catalog and they have no scores here.
+
+companies:
+  - name: Lantern Reel
+    platform: Lantern
+    notes: A fictional subscription app with one flagship series and a thin library.
+    dimension_inputs:
+      content_strength: 72
+      narrative_ownership: 80
+      distribution_power: 64
+      community_strength: 58
+      monetization_infrastructure: 70
+    titles:
+      - name: The Last Lantern
+        episodes: 48
+        logline: A night-market clerk inherits a lantern that shows one true sentence a day.
+        blurb: |
+          The Last Lantern is a Lantern original. Forty-eight episodes.
+          A clerk in a floating night market inherits a cracked lantern.
+          Once a day it reveals a sentence that is true, and only one person can read it.
+
+  - name: Night Bazaar
+    platform: Bazaar
+    notes: A fictional studio that owns its serials and runs its own store.
+    dimension_inputs:
+      content_strength: 88
+      narrative_ownership: 90
+      distribution_power: 86
+      community_strength: 84
+      monetization_infrastructure: 80
+    titles:
+      - name: Stall Seven
+        episodes: 120
+        logline: Seven rival vendors share one stall and one secret recipe.
+        blurb: |
+          Stall Seven runs on the Bazaar app. One hundred twenty episodes.
+          Seven vendors rotate through a single stall. The recipe book is locked,
+          and each episode trades one page for a favor.
+
+  - name: Harbor and Thorn
+    platform: Harbor
+    notes: A fictional coastal label with a short original and little reach.
+    dimension_inputs:
+      content_strength: 48
+      narrative_ownership: 55
+      distribution_power: 42
+      community_strength: 60
+      monetization_infrastructure: 38
+    titles:
+      - name: Salt Wedding
+        episodes: 24
+        logline: Two families plan a wedding on a pier that floods at noon.
+        blurb: |
+          Salt Wedding is a Harbor serial. Twenty-four episodes.
+          The pier floods at noon, so every vow has to land before the tide.
+
+  - name: Copperframe
+    platform: Copper
+    notes: A fictional host of licensed clips with almost no owned stories.
+    dimension_inputs:
+      content_strength: 30
+      narrative_ownership: 28
+      distribution_power: 35
+      community_strength: 22
+      monetization_infrastructure: 40
+    titles:
+      - name: Room 4B
+        episodes: 12
+        logline: A hotel clerk rents room 4B to guests who left a year ago.
+        blurb: |
+          Room 4B is twelve short episodes on Copper.
+          The clerk keeps a ledger of guests who never check out.
+
+  - name: Kite Alley
+    platform: Kite
+    notes: A fictional app with a growing original slate and a noisy fan club.
+    dimension_inputs:
+      content_strength: 61
+      narrative_ownership: 58
+      distribution_power: 70
+      community_strength: 66
+      monetization_infrastructure: 52
+    titles:
+      - name: Paper Kites
+        episodes: 36
+        logline: Courier kids fly paper kites that carry other people's memories.
+        blurb: |
+          Paper Kites is a Kite original. Thirty-six episodes.
+          The kites only fly when the memory is still wanted by someone on the ground.
+
+help_articles:
+  - Reset your password in Settings.
+  - Use Forgot password to get a reset link.
+  - Two-factor codes expire after 30 seconds.
+  - Invoices arrive by email.
+  - Our office is closed on Sundays.
+  - Release notes for the fictional Kite player, version 4.
