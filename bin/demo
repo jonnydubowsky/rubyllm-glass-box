@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Run one tour demo, or every demo.
+#   bin/demo 02
+#   bin/demo 02-chat-ask
+#   bin/demo all
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+run_dir() {
+  local dir="$1"
+  if [[ ! -f "$dir/run.rb" ]]; then
+    echo "No demo at $dir" >&2
+    exit 1
+  fi
+  echo "---- $dir ----"
+  bundle exec ruby "$dir/run.rb"
+}
+
+if [[ $# -lt 1 ]]; then
+  echo "Usage: bin/demo <number|directory|all>" >&2
+  echo "Example: GLASS_BOX_MODE=offline bin/demo 02" >&2
+  exit 1
+fi
+
+target="$1"
+if [[ "$target" == "all" ]]; then
+  for dir in demos/*/; do
+    run_dir "${dir%/}"
+  done
+  exit 0
+fi
+
+if [[ -f "demos/$target/run.rb" ]]; then
+  run_dir "demos/$target"
+  exit 0
+fi
+
+shopt -s nullglob
+matches=(demos/"$(printf '%02d' "$target" 2>/dev/null || true)"-*/run.rb)
+if [[ ${#matches[@]} -eq 1 ]]; then
+  run_dir "$(dirname "${matches[0]}")"
+  exit 0
+fi
+
+echo "No demo matches '$target'." >&2
+exit 1

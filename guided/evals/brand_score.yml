@@ -1,0 +1,17 @@
+# Bands the local scorer must return. The model is not the grader.
+cases:
+  - name: lantern_reel
+    inputs: Lantern Reel
+    expected_output: Emerging Power
+  - name: night_bazaar
+    inputs: Night Bazaar
+    expected_output: Category Dominant
+  - name: harbor_and_thorn
+    inputs: Harbor and Thorn
+    expected_output: Niche Player
+  - name: copperframe
+    inputs: Copperframe
+    expected_output: Limited Structural Presence
+  - name: kite_alley
+    inputs: Kite Alley
+    expected_output: Emerging Power
