@@ -89,4 +89,4 @@ These are visible in the output, and the demo READMEs repeat them.
 
 ## Tests
 
-`bundle exec rake test` is offline. GitHub Actions runs it on Ruby 3.2.3. The suite checks the score boundaries, the catalog, that every demo exits 0, and that `bin/learn auto` finishes.
+`bundle exec rake test` is offline. GitHub Actions runs it on the newest Ruby 3.2 available to the runner. The suite checks the score boundaries, the catalog, that every demo exits 0, and that `bin/learn auto` finishes.
