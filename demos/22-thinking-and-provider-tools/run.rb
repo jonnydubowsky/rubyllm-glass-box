@@ -15,12 +15,16 @@ chat = GlassBox.watch(
 GlassBox.log "thinking", chat.thinking.inspect
 GlassBox.log "provider tools", chat.provider_tools.inspect
 begin
-  response = chat.ask "What is the latest Ruby release?"
+  prompt = "What is the latest Ruby release?"
+  GlassBox.log "prompt", prompt
+  response = chat.ask prompt
   GlassBox.log "reply", response.content
   thinking = response.respond_to?(:thinking) ? response.thinking : nil
   GlassBox.log "response.thinking", thinking&.respond_to?(:text) ? thinking.text.inspect : thinking.inspect
   GlassBox.print_citations(response)
-rescue RubyLLM::UnsupportedServerToolError, RubyLLM::ArgumentError, RubyLLM::Error => error
+rescue RubyLLM::UnsupportedServerToolError, ArgumentError => error
+  # Raised when this model has no web search. Any other provider error, such
+  # as a rejected key, stops the demo with a short report.
   GlassBox.log "provider tools not sent", "#{error.class}: #{error.message}"
   puts "The chat was still configured with with_thinking(effort: :high) and with_provider_tools(:web_search)."
 end

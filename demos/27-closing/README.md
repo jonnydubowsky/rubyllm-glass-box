@@ -8,11 +8,15 @@ This demo prints the install command `bundle add ruby_llm --version 2.2.3`, the 
 GLASS_BOX_MODE=offline bin/demo 27
 ```
 
-You can also run `ruby demos/27-closing/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
+You can also run `ruby demos/27-closing/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset and you have set a chat key, the demo runs live.
+
+## What a live run sends
+
+This demo calls no provider in any mode.
 
 ## What to look at
 
-The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
+The script prints the closing card's two sentences, the install command with the pinned version, and the addresses of the site and the tour video. The last line is the gem version that Bundler loaded.
 
 Docs: https://rubyllm.com/
 

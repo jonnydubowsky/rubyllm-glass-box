@@ -8,11 +8,15 @@ This demo prints the tour's curl command without sending it. It then reads the s
 GLASS_BOX_MODE=offline bin/demo 01
 ```
 
-You can also run `ruby demos/01-curl-contrast/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
+You can also run `ruby demos/01-curl-contrast/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset and you have set a chat key, the demo runs live.
+
+## What a live run sends
+
+A live run sends one chat request to your default chat model. The demo never sends the curl.
 
 ## What to look at
 
-The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
+Read `[curl (not sent)]`, and then `[assistant text from the fixture body]`. The script found that text by searching the `output` array for the item of type `message`. Open `demos/fixtures/openai_response.json` and find the same item by hand. The first item in that array is a reasoning item. Then read `[RubyLLM reply]`, which `chat.ask` returned as `response.content`.
 
 Docs: https://rubyllm.com/getting-started/
 

@@ -8,24 +8,31 @@ The demos print the prompt, the tool call, the decision, the cost and the trace 
 
 ## Run
 
-You need Ruby 3.2.3 or newer. On a Mac, rbenv or mise reads the version from `.ruby-version`.
+You need Ruby 3.2.3 or newer. The Ruby that ships with macOS is 2.6, so on a Mac install a newer one with Homebrew or rbenv first. The repository has no `.ruby-version` file, and the `Gemfile` accepts any Ruby from 3.2.3 up.
 
 ```
 bin/setup
 GLASS_BOX_MODE=offline bin/demo 02
 GLASS_BOX_MODE=offline bin/demo all
-bin/learn
-bin/learn auto
+GLASS_BOX_MODE=offline bin/learn
 bundle exec rake test
 ```
 
-`bin/setup` runs `bundle install` and copies `.env.example` to `.env` if you don't have a `.env` file yet. You can leave the keys blank.
+`bin/setup` checks the Ruby version, runs `bundle install` and copies `.env.example` to `.env` if you don't have a `.env` file yet. You can leave the keys blank.
+
+`bin/demo` takes a number, a folder name or `all`. `bin/demo 8`, `bin/demo 08` and `bin/demo 08-mcp-linear` run the same demo, and `bin/demo list` prints the folder names.
+
+`bin/learn` prints the next lesson, waits for you to press Enter and then runs that lesson's step. Each lesson explains the concept, says what the step does and says what to look at in the output. `bin/learn 4` does the same for step 4. `bin/learn status` lists your saved checkpoints, and `bin/learn reset` clears them. `bin/learn auto` runs every step without the lesson text.
 
 With `GLASS_BOX_MODE=offline` (or `mock` or `fixture`), every demo and the guided course run without a network connection. In that mode the chat demos use RubyLLM's test helper, which feeds a scripted reply into the real gem. The real gem then handles the tool loop, the approval pause, the schema parse, streaming and fallbacks, and it builds the cost object. The test helper covers chat only, so the demos for embeddings, rerank, speech, images, video, OCR, moderation, judgments and token counts print labeled output from a local stand-in.
 
-If you leave the mode unset or set `GLASS_BOX_MODE=live`, each demo calls a provider once that provider's key is set. `RubyLLM.paint` and video generation also need `GLASS_BOX_PAID_MEDIA=1`. The image demo uses OpenAI unless you set `RUBYLLM_IMAGE_MODEL`, and the video demo needs `XAI_API_KEY`. `RubyLLM.batch` also needs `GLASS_BOX_BATCH=1`.
+If you leave the mode unset, each program runs live when a chat key is set and offline when none is. A key that your shell profile exports counts, so read the `mode:` line that every demo and step prints. With `GLASS_BOX_MODE=live`, each demo calls a provider once that provider's key is set. `RubyLLM.paint` and video generation also need `GLASS_BOX_PAID_MEDIA=1`. The image demo uses OpenAI unless you set `RUBYLLM_IMAGE_MODEL`, and the video demo needs `XAI_API_KEY`. `RubyLLM.batch` also needs `GLASS_BOX_BATCH=1`.
 
 The demos read approval answers from stdin. When no terminal is attached, `GLASS_BOX_APPROVE=yes` approves each request, and `bin/learn auto` sets that variable for you.
+
+When a provider rejects a request, the program prints the error class, the provider's message with any key text hidden, and a next step. Set `RUBYLLM_DEBUG=true` to get the full backtrace.
+
+`bin/live-check` runs every demo in live mode and prints one row per demo, with the number of requests that reached a provider. It spends money on the accounts whose keys are set. The [workshop leader guide](docs/workshop-leader-guide.md) lists the requests each demo sends in live mode.
 
 The demos read `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY` or `GOOGLE_API_KEY`, `OPENROUTER_API_KEY` and `XAI_API_KEY` from the environment or from `.env`. Some demos also read `COHERE_API_KEY`, `MISTRAL_API_KEY`, `TYPESAFE_API_KEY`, `ELEVENLABS_API_KEY` and the `RUBYLLM_*` overrides listed in `.env.example`.
 
@@ -91,12 +98,18 @@ The tour ends on a closing card with no code on it. `demos/27-closing` prints th
 
 Each demo labels its stand-in in the output, and the demo's README lists it again.
 
-* The Rails streaming demo runs in memory without booting Rails. The current RubyLLM Rails generator writes a job named `ChatResponseJob` that calls `chat.complete(&:broadcast)`. The tour showed `broadcast_append_chunk`.
+* The Rails streaming demo runs in memory without booting Rails. The current RubyLLM Rails generator writes a job named `ChatResponseJob` that calls `chat.complete(&:broadcast)`. The tour showed `broadcast_append_chunk`, which generator releases 1.14 through 2.1 wrote into the app's message model.
 * The MCP demo declares the Linear server and leaves it unconnected. A local catalog MCP server answers `list_titles`.
-* The evaluation demo sets `evaluator false`, so no model grades the answers. Its sale-item case fails on purpose.
+* The evaluation demo answers from a lookup table and sets `evaluator false`, so no model writes or grades the answers. Its sale-item case fails on purpose.
 * The demos for judgments, OCR, rerank, speech, images, video, token counts, batch submit and web-search citations call the network only when the key and flag named above are set. Offline, the speech demo writes a silent WAV file. The demos print the tour's "5 tokens" figure and a cache hit only when the provider returns them.
 * `clef-flash` on Ollama is mentioned and never called, because the bundled registry doesn't include it.
 
+RubyLLM 2.2.3 is the newest release, and its test helper scripts chat replies only. `test/glass_box/stand_ins_test.rb` fails when a later release changes what the helper covers. That failure is the signal to replace a stand-in with the gem's own stub.
+
+## Leading a workshop
+
+The [workshop leader guide](docs/workshop-leader-guide.md) covers setup on a Mac, the time each part takes, the places where a run can stop and the demos that spend money in live mode.
+
 ## Tests
 
-`bundle exec rake test` runs offline. GitHub Actions runs the same suite on the newest Ruby 3.2 the runner offers. The tests check the score boundaries and the catalog, and they confirm that every demo exits 0 and that `bin/learn auto` finishes.
+`bundle exec rake test` runs offline. GitHub Actions runs the same suite on Ruby 3.2, 3.4 and 4.0. The tests check the score boundaries and the catalog, and they confirm that every demo exits 0 and that `bin/learn auto` finishes. They run `bin/demo` with each kind of argument, including `all`, `08`, `8`, a folder name and an unknown number. They also check that every lesson has its teaching sections in order and quotes each prompt that its step sends.

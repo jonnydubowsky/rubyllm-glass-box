@@ -1,17 +1,25 @@
 # 13. Tracing a run with OpenTelemetry
 
-`RubyLLM::OpenTelemetry.enable` sends the gem's instrumentation events to OpenTelemetry. A local tracer in this step records the same events for the chat, the tool call, the workflow and the workflow step, each with a duration.
+## The concept
 
-The step runs one description of Harbor and Thorn inside `RubyLLM.workflow` and a named step, and the trace prints those names. Under the trace, a score table shows Harbor and Thorn at 48.8, in the Niche Player band, from the weighted sum.
+RubyLLM emits an instrumentation event for each chat request, tool call, workflow and workflow step. `RubyLLM::OpenTelemetry.enable` turns those events into OpenTelemetry spans, which a tracing backend can draw as a waterfall. `RubyLLM.workflow` and `workflow.step` give the spans the names you choose.
 
-Read the waterfall chart. The span names and times record each call the program made, so check them before you read the model's paragraph.
+## What this step does
+
+The step calls `RubyLLM::OpenTelemetry.enable` and also subscribes a local recorder to the same events, so the trace prints in the terminal with no tracing backend. Inside a workflow named "Score brand" and a step named "Compute", the step asks: "Harbor and Thorn has a composite of 48.8 in the Niche Player band. Say so in one sentence." Under the trace, the step prints the score table for Harbor and Thorn.
+
+## What to look at
+
+Read the `[trace]` block. Each row is one event with its duration, and the indentation shows which event ran inside which. The rows record each call the program made, so check them before you read the model's sentence. In the score table, check that the weighted sum is 48.8.
 
 ## Run
 
 ```
-bin/learn run 13
-ruby demos/13-opentelemetry/run.rb
+bin/learn 13
+GLASS_BOX_MODE=offline bin/demo 13
 ```
+
+`bin/learn 13` prints this lesson and then runs the step. `bin/demo 13` runs the standalone demo in `demos/13-opentelemetry`.
 
 Docs: https://rubyllm.com/opentelemetry/
 

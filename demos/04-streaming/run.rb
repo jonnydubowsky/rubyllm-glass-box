@@ -7,7 +7,7 @@ GlassBox.boot!
 GlassBox.banner "04  Streaming tokens with a block"
 
 haiku = "Blocks yield like spring rain, methods bloom in quiet red, joy compiles itself."
-GlassBox.script_replies haiku, cost: 0.0011
+GlassBox.script_replies haiku, cost: 0.0011, interval: 0.04
 chat = GlassBox.watch(GlassBox.chat)
 print "chunks: "
 chat.ask("Write a haiku about Ruby.") { |chunk| print chunk.content }

@@ -5,7 +5,7 @@ ENV["GLASS_BOX_APPROVE"] = "yes"
 
 require "minitest/autorun"
 require "open3"
-require_relative "../lib/glass_box"
+require_relative "../lib/glass_box/learn"
 
 module GlassBoxTest
   module_function

@@ -98,7 +98,7 @@ module GlassBox
     end
   end
 
-  def judge_ticket(judge_class, text)
+  def judge_ticket(judge_class, text, fixture_department: :billing)
     boot!
     if live? && provider_configured?(:typesafe)
       log("provider", "#{judge_class}.judge with the default judgment model")
@@ -111,7 +111,7 @@ module GlassBox
       judge_class.judge(text, model: "gemini-decision-1", provider: :gemini)
     else
       log("fixture", "#{judge_class}.judge was not called. The numbers below are a recorded card built with RubyLLM::Judgment.")
-      Fixtures.judgment_ticket
+      Fixtures.judgment_ticket(department: fixture_department)
     end
   end
 end

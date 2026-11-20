@@ -1,0 +1,11 @@
+# The tour's card shows the first case in full and names the other two.
+cases:
+  - name: unopened_return
+    inputs: Can I return an unopened item after 14 days?
+    expected_output: Yes, unopened items can be returned within 30 days.
+  - name: damaged_item
+    inputs: My item arrived damaged. Can I return it?
+    expected_output: Yes, damaged items can be returned within 30 days.
+  - name: sale_item
+    inputs: Can I return something I bought on sale?
+    expected_output: No, sale items are final.

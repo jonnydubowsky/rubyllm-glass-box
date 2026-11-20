@@ -8,11 +8,15 @@ This demo calls `with_citations` on an ask that attaches `demos/fixtures/notes.t
 GLASS_BOX_MODE=offline bin/demo 23
 ```
 
-You can also run `ruby demos/23-citations-and-cost/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
+You can also run `ruby demos/23-citations-and-cost/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset and you have set a chat key, the demo runs live.
+
+## What a live run sends
+
+A live run sends one chat request with the attached note and citations turned on to your default chat model.
 
 ## What to look at
 
-The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
+`[reply]` is the model's answer about the note. `[citations]` lists what the provider attached, and offline the list is empty. The recorded card under it carries a label that says it came from outside this response. The last line is `chat.cost.total`.
 
 Docs: https://rubyllm.com/citations/
 

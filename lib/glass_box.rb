@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "English"
 require "fileutils"
 require "logger"
 require "json"
@@ -25,6 +26,9 @@ module GlassBox
   def boot!
     return if @booted
 
+    # Print each line as it is written, so output and errors stay in order
+    # when a learner pipes a demo into a file or a pager.
+    $stdout.sync = true
     require "dotenv"
     env_file = ROOT.join(".env")
     Dotenv.load(env_file) if env_file.file?
@@ -33,7 +37,42 @@ module GlassBox
     @offline = decide_offline
     configure!
     arm_offline_stub! if @offline
+    explain_provider_errors_at_exit
     @booted = true
+  end
+
+  # When a provider rejects a request, Ruby would print a long backtrace. This
+  # hook prints the error class, the provider's message and a next step, then
+  # exits 1. Set RUBYLLM_DEBUG=true to see the backtrace.
+  def explain_provider_errors_at_exit
+    at_exit do
+      error = $ERROR_INFO
+      known = error.is_a?(RubyLLM::Error) || error.is_a?(RubyLLM::ConfigurationError)
+      next unless known && ENV["RUBYLLM_DEBUG"] != "true"
+
+      # exit! skips Ruby's own flush, so print what the demo wrote first.
+      $stdout.flush
+      warn provider_error_report(error)
+      exit!(1)
+    end
+  end
+
+  def provider_error_report(error)
+    lines = ["", "The provider call failed.", "#{error.class}: #{mask_keys(error.message)}"]
+    lines << case error
+             when RubyLLM::UnauthorizedError
+               "The provider rejected the API key. Check the key in .env, or set GLASS_BOX_MODE=offline."
+             when RubyLLM::ConfigurationError
+               "A provider this run needs has no key. Add the key to .env, or set GLASS_BOX_MODE=offline."
+             else
+               "Run again with GLASS_BOX_MODE=offline to use the scripted replies."
+             end
+    lines.join("\n")
+  end
+
+  # Provider error messages can quote part of the key that was sent.
+  def mask_keys(text)
+    text.to_s.gsub(/\b(sk|key|xai|gsk|AIza)[-_A-Za-z0-9*]{12,}/, "[key hidden]")
   end
 
   def offline?
@@ -108,17 +147,33 @@ module GlassBox
     @default_provider
   end
 
+  # The model and provider for an agent class. It returns the wanted pair when
+  # that provider is configured, and the default chat model when it is not, so
+  # a learner with one key can still run the agent demos in live mode.
+  def model_for(model, provider)
+    boot!
+    return [model, provider] if provider_configured?(provider)
+
+    preferred_model
+  end
+
   def arm_offline_stub!
     require "ruby_llm/test_helper"
     RubyLLM::TestHelper::Script.stub(["(offline placeholder)"], { cost: nil, interval: nil })
   end
 
-  def script_replies(*replies, cost: 0.0042)
+  # Queues scripted replies for the next chat requests. This does nothing in
+  # live mode. interval: is the pause in seconds between streamed words.
+  def script_replies(*replies, cost: 0.0042, interval: nil)
     boot!
     return unless offline?
 
     require "ruby_llm/test_helper"
-    RubyLLM::TestHelper::Script.stub(replies, { cost: cost, interval: nil })
+    RubyLLM::TestHelper::Script.stub(replies, { cost: cost, interval: interval })
+  end
+
+  def mode_label
+    offline? ? "offline (stub or fixture)" : "live provider"
   end
 
   def tool_call(name, **arguments)
@@ -187,7 +242,7 @@ module GlassBox
     boot!
     puts
     puts title
-    puts "mode: #{offline? ? "offline (stub or fixture)" : "live provider"}"
+    puts "mode: #{mode_label}"
     puts "ruby_llm: #{RubyLLM::VERSION}"
     puts
   end
@@ -237,7 +292,7 @@ module GlassBox
   end
 
   def print_transcript(chat)
-    log("transcript", "")
+    puts "[transcript]"
     chat.messages.each { |message| print_message(message) }
   end
 

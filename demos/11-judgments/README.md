@@ -8,11 +8,15 @@ This demo defines `TicketTriage < RubyLLM::Judge` with a probability field and a
 GLASS_BOX_MODE=offline bin/demo 11
 ```
 
-You can also run `ruby demos/11-judgments/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
+You can also run `ruby demos/11-judgments/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset and you have set a chat key, the demo runs live.
+
+## What a live run sends
+
+A live run sends one judgment request. The demo uses TypeSafe when `TYPESAFE_API_KEY` is set, then OpenAI, then Gemini. With none of those keys, a live run still uses the fixture.
 
 ## What to look at
 
-The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
+Read `[fixture]` or `[provider]` first to learn whether a model made the judgment. Then read the probability and the choice. The `model` line names the judge, and offline it reads `offline-fixture`. The cost line prints nil when the provider reported no price.
 
 Docs: https://rubyllm.com/judgments/
 

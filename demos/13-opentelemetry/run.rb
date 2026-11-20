@@ -18,7 +18,7 @@ class LookupOrder < RubyLLM::Tool
 end
 
 GlassBox.script_replies(
-  GlassBox.tool_call(:lookup_order, order_id: "42"),
+  GlassBox.tool_call(:lookup_order, order_id: 42),
   "Order 42 is packed.",
   cost: 0.002
 )

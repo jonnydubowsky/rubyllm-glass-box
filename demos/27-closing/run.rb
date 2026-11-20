@@ -16,6 +16,6 @@ puts <<~CARD
   https://rubyllm.com/
   Tour: https://github.com/crmne/ruby_llm/releases/download/v2.1.0/rubyllm-tour.mp4
 CARD
-puts "This directory is the course's closing script. The tour card has no demo of its own."
+puts "The tour's closing card has no code on it. This script prints the card and the pinned version."
 puts "Installed: ruby_llm #{RubyLLM::VERSION}"
 puts

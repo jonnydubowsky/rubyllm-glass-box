@@ -1,17 +1,27 @@
 # 25. Compaction and the agentic loop
 
-`with_compaction(at:)` sets the token count at which the gem shrinks the history. `ask_later` queues the user message. Each `chat.step` call runs one part of the loop, which is the model's turn, the tool, or the model's next turn. The loop stops when `complete?` or `waiting?` returns true.
+## The concept
 
-The learner's question is how many episodes Room 4B has. The tool returns Copperframe, 12 episodes and the logline. The step prints a threshold of 50_000. The transcript is short, so compaction never rewrites it, and `chat.compaction` still shows the setting.
+An agentic loop repeats model turns and tool calls until the model has its answer. `chat.ask` runs the whole loop for you. `ask_later` queues the user message, and each `chat.step` call then runs one part of the loop, which is a model turn or a tool call. The loop is over when `complete?` returns true, and the chat waits for a person when `waiting?` returns true.
 
-Read the step numbers and the tool result. The episode count comes from the result hash.
+`with_compaction(at:)` sets the input-token count at which the provider shrinks a long history. Anthropic and OpenAI replace the older turns with a summary.
+
+## What this step does
+
+The step sets a compaction threshold of 50_000 tokens, queues this question and calls `chat.step` until the chat is complete: "How many episodes does Room 4B have?" In the scripted run, the model calls `catalog_lookup`, and the tool returns Copperframe, 12 episodes and the logline. The transcript is short, so compaction never rewrites it, and `chat.compaction` still shows the setting.
+
+## What to look at
+
+Read the numbered `step` lines. Each one shows the state of the loop, the role of the message that the step produced and the start of its content. The episode count comes from the `[tool result]` hash, and the last assistant message repeats it.
 
 ## Run
 
 ```
-bin/learn run 25
-ruby demos/25-compaction-and-agentic-loop/run.rb
+bin/learn 25
+GLASS_BOX_MODE=offline bin/demo 25
 ```
+
+`bin/learn 25` prints this lesson and then runs the step. `bin/demo 25` runs the standalone demo in `demos/25-compaction-and-agentic-loop`.
 
 Docs: https://rubyllm.com/agentic-workflows/
 

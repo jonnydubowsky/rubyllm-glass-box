@@ -1,17 +1,27 @@
 # 12. Evaluating an agent against a dataset
 
-`RubyLLM::Evaluation` runs an agent against a dataset. If the evaluator stays on, the chat model grades each answer. This course sets `evaluator false` and checks each answer with a Minitest assertion, so the result is the same on every run and needs no network.
+## The concept
 
-The guided dataset is `guided/evals/brand_score.yml`. Its `perform` method loads the company and returns `company.band`, and the assertion compares that string with `expected_output`. All five fictional companies must pass. If one fails, the assertion raises an error and the step does not save its checkpoint.
+`RubyLLM::Evaluation` runs your code against a dataset of cases. Each case has an input and an expected output, and the `perform` method produces an answer for one input. If the evaluator stays on, the chat model grades each answer. With `evaluator false`, the `assertions` method grades each answer with Minitest assertions, so the result is the same on every run and needs no network.
 
-The tour's demo in `demos/12-evaluations` uses a different dataset. Its agent gives a wrong answer about sale items on purpose, so `passed?` is false and the process still exits 0. Read that demo's report for the failing line. Neither run uses a model to grade answers.
+## What this step does
+
+The dataset is `guided/evals/brand_score.yml`, with one case for each of the five fictional companies. `perform` loads the company and returns `company.band`, and the assertion compares that string with `expected_output`. No prompt goes to a model.
+
+The step saves the report as `tmp/evaluations/BrandScoreEvaluation.json`. If a case fails, the step raises an error and does not save its checkpoint.
+
+## What to look at
+
+The report prints one line per case and then a count of passed and failed cases. All five should pass. `demos/12-evaluations` uses the tour's three case names, and its sale-item case fails on purpose. Run `bin/demo 12` to read a failing line.
 
 ## Run
 
 ```
-bin/learn run 12
-ruby demos/12-evaluations/run.rb
+bin/learn 12
+GLASS_BOX_MODE=offline bin/demo 12
 ```
+
+`bin/learn 12` prints this lesson and then runs the step. `bin/demo 12` runs the standalone demo in `demos/12-evaluations`.
 
 Docs: https://rubyllm.com/evaluations/
 

@@ -1,19 +1,27 @@
 # 05. Streaming a chat through a Rails job
 
-The tour loads a saved Chat inside an Active Job and appends each chunk to the page. The job on screen is `ChatStreamJob`, and it calls `message.broadcast_append_chunk`.
+## The concept
 
-In ruby_llm 2.2.3, the chat UI generator writes `ChatResponseJob`, which calls `chat.complete(&:broadcast)`. `Chunk#broadcast` ends in a call to `message.broadcast_chunk`. `broadcast_append_chunk` came from older generated application code, and this gem has no method by that name.
+A Rails app streams a reply by running the chat in a background job. The job loads a saved Chat record and completes it, and each chunk goes to the page over a Turbo Stream. In ruby_llm 2.2.3, the chat UI generator writes `ChatResponseJob`, which calls `chat.complete(&:broadcast)`. `Chunk#broadcast` ends in a call to `message.broadcast_chunk`.
 
-The course runs this step without booting Rails. The step streams a sentence that includes Lantern Reel's composite score of 68.5 and counts the chunks that an in-memory page would have appended. `GlassBox::SBPI` computes that score before the model writes anything.
+The tour shows an older shape. The job on screen is `ChatStreamJob`, and it calls `message.broadcast_append_chunk`. Releases 1.14 through 2.1 of the chat UI generator wrote that method into the app's message model. The 2.2.3 gem defines no method by that name for a chat to call.
 
-Read the two job classes that `demos/05-rails-turbo-stream/run.rb` prints, and then read the chunk count in this step.
+## What this step does
+
+The course runs this step without booting Rails. The step sends this prompt with a block and collects each chunk in an array, the way a page would append them: "Lantern Reel has a composite of 68.5 in the Emerging Power band. Say so in one sentence." `GlassBox::SBPI` computes that score before the model writes anything.
+
+## What to look at
+
+Read the count under `[chunks appended in memory]`. A Rails page would have received that many appends. Then run `bin/demo 5` and read the two job classes that the demo prints.
 
 ## Run
 
 ```
-bin/learn run 5
-ruby demos/05-rails-turbo-stream/run.rb
+bin/learn 5
+GLASS_BOX_MODE=offline bin/demo 5
 ```
+
+`bin/learn 5` prints this lesson and then runs the step. `bin/demo 5` runs the standalone demo in `demos/05-rails-turbo-stream`.
 
 Docs: https://rubyllm.com/rails-streaming/
 

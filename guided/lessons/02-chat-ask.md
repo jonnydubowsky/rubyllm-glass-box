@@ -1,17 +1,25 @@
 # 02. chat.ask starts a conversation
 
-`RubyLLM.chat` opens a conversation, and `chat.ask` sends one prompt and returns the reply.
+## The concept
 
-In this step, the learner asks for one sentence about The Last Lantern. The prompt includes the title's blurb from `guided/data/catalog.yml`. In the offline reply, the episode count is 48, the integer the catalog stores for that title. The program loaded that row before the ask, and the model's sentence only describes it.
+`RubyLLM.chat` opens a conversation. `chat.ask` sends one prompt and returns the reply. The reply's text is `response.content`, and `chat.cost.total` holds what the conversation has cost so far.
 
-Read the prompt log next to the reply log, and then read the cost line. The tour shows the same prompt and reply on a single screen.
+## What this step does
+
+The step asks for one sentence about The Last Lantern. The prompt starts with "In one sentence, summarize this fictional series:" and then includes the title's blurb from `guided/data/catalog.yml`. The blurb says the series has forty-eight episodes, so the prompt holds the fact that the reply should repeat. Offline, the scripted reply gives the episode count as 48, the integer the catalog stores for that title.
+
+## What to look at
+
+Read `[prompt]` next to `[reply]`, and check the episode count in the reply against the blurb in the prompt. Then read the cost line. The tour shows the same kind of prompt and reply on a single screen.
 
 ## Run
 
 ```
-bin/learn run 2
-ruby demos/02-chat-ask/run.rb
+bin/learn 2
+GLASS_BOX_MODE=offline bin/demo 2
 ```
+
+`bin/learn 2` prints this lesson and then runs the step. `bin/demo 2` runs the standalone demo in `demos/02-chat-ask`.
 
 Docs: https://rubyllm.com/chat/
 

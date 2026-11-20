@@ -39,5 +39,8 @@ until chat.complete? || chat.waiting? || steps > 6
           end
   puts "step #{steps} state=#{state} role=#{message&.role} content=#{message&.content.to_s[0, 80].inspect}"
 end
-puts "think, act, observe. chat.step until chat.complete? or chat.waiting?."
+puts
+puts "The tour's card labels the loop think, act, observe. Each chat.step call above ran one of those parts."
+puts "The loop stops when chat.complete? or chat.waiting? returns true."
+puts
 GlassBox.print_cost(chat)
