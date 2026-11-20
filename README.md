@@ -1,14 +1,14 @@
 # RubyLLM glass box
 
-Runnable demos of every concept in the [RubyLLM tour](https://github.com/crmne/ruby_llm/releases/download/v2.1.0/rubyllm-tour.mp4), plus a guided path that scores a fictional micro-drama catalog in the open.
+This repository has a runnable demo for each of the 27 concepts in the [RubyLLM tour](https://github.com/crmne/ruby_llm/releases/download/v2.1.0/rubyllm-tour.mp4). It also has a guided course, `bin/learn`, in which the learner scores five fictional micro-drama companies.
 
-RubyLLM is the library by Carmine Paolino: [rubyllm.com](https://rubyllm.com/) and [github.com/crmne/ruby_llm](https://github.com/crmne/ruby_llm). This repository pins `ruby_llm` 2.2.3. Where the tour's on-screen code and the current gem differ, the demos call the current API and the demo README says what changed.
+Carmine Paolino wrote RubyLLM. Its site is [rubyllm.com](https://rubyllm.com/), and its source is at [github.com/crmne/ruby_llm](https://github.com/crmne/ruby_llm). This repository pins `ruby_llm` 2.2.3. In some places the current gem's API differs from the code in the tour. Those demos call the current API, and each one's README lists the difference.
 
-A glass box here means you can read the prompt, the tool call, the decision, the cost, and the trace in the terminal. The number on a brand card is computed in Ruby. The model does not get to be the only place that number exists.
+The demos print the prompt, the tool call, the decision, the cost and the trace to the terminal, so a learner can read each one. Ruby code computes the score on each brand card, so the score exists outside the model's reply.
 
 ## Run
 
-Ruby 3.2.3 or newer. On a Mac, rbenv or mise will pick up `.ruby-version`.
+You need Ruby 3.2.3 or newer. On a Mac, rbenv or mise reads the version from `.ruby-version`.
 
 ```
 bin/setup
@@ -19,17 +19,19 @@ bin/learn auto
 bundle exec rake test
 ```
 
-`bin/setup` runs `bundle install` and copies `.env.example` to `.env` when you do not already have one. Keys can stay blank.
+`bin/setup` runs `bundle install` and copies `.env.example` to `.env` if you don't have a `.env` file yet. You can leave the keys blank.
 
-`GLASS_BOX_MODE=offline` (or `mock`, or `fixture`) runs every demo and the guided path with no network. Chat uses RubyLLM's test helper, so the tool loop, approval pause, schema parse, streaming, fallbacks, and cost object are the real gem, fed by a scripted reply. Embeddings, rerank, speech, images, video, OCR, moderation, judgments, and token counts use a labeled local stand-in, because those methods are not covered by the chat stub.
+With `GLASS_BOX_MODE=offline` (or `mock` or `fixture`), every demo and the guided course run without a network connection. In that mode the chat demos use RubyLLM's test helper, which feeds a scripted reply into the real gem. The real gem then handles the tool loop, the approval pause, the schema parse, streaming and fallbacks, and it builds the cost object. The test helper covers chat only, so the demos for embeddings, rerank, speech, images, video, OCR, moderation, judgments and token counts print labeled output from a local stand-in.
 
-Leave the mode unset, or set `GLASS_BOX_MODE=live`, and a call goes to a provider when its key is set. Paint and video also need `GLASS_BOX_PAID_MEDIA=1`. Paint uses OpenAI unless `RUBYLLM_IMAGE_MODEL` is set. Video needs `XAI_API_KEY`. `RubyLLM.batch` also needs `GLASS_BOX_BATCH=1`. Approval prompts read stdin. `GLASS_BOX_APPROVE=yes` approves when there is no terminal, which is what `bin/learn auto` sets.
+If you leave the mode unset or set `GLASS_BOX_MODE=live`, each demo calls a provider once that provider's key is set. `RubyLLM.paint` and video generation also need `GLASS_BOX_PAID_MEDIA=1`. The image demo uses OpenAI unless you set `RUBYLLM_IMAGE_MODEL`, and the video demo needs `XAI_API_KEY`. `RubyLLM.batch` also needs `GLASS_BOX_BATCH=1`.
 
-Keys read from the environment or `.env`: `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY` or `GOOGLE_API_KEY`, `OPENROUTER_API_KEY`, `XAI_API_KEY`. Optional: `COHERE_API_KEY`, `MISTRAL_API_KEY`, `TYPESAFE_API_KEY`, `ELEVENLABS_API_KEY`, and the `RUBYLLM_*` overrides in `.env.example`.
+The demos read approval answers from stdin. When no terminal is attached, `GLASS_BOX_APPROVE=yes` approves each request, and `bin/learn auto` sets that variable for you.
+
+The demos read `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY` or `GOOGLE_API_KEY`, `OPENROUTER_API_KEY` and `XAI_API_KEY` from the environment or from `.env`. Some demos also read `COHERE_API_KEY`, `MISTRAL_API_KEY`, `TYPESAFE_API_KEY`, `ELEVENLABS_API_KEY` and the `RUBYLLM_*` overrides listed in `.env.example`.
 
 ## The catalog
 
-Five fictional companies live in `guided/data/catalog.yml`. Dimension inputs are numbers this course assigns. The composite is the weighted sum:
+The file `guided/data/catalog.yml` lists five fictional companies. Each company has an assigned number for each dimension below, and its composite score is the weighted sum of those numbers.
 
 | Dimension | Weight |
 | --- | --- |
@@ -39,9 +41,17 @@ Five fictional companies live in `guided/data/catalog.yml`. Dimension inputs are
 | Community Strength | 0.20 |
 | Monetization Infrastructure | 0.15 |
 
-Bands: Category Dominant from 85, Strong Ecosystem Player from 70, Emerging Power from 55, Niche Player from 40, Limited Structural Presence below 40.
+Each band covers a range of composite scores.
 
-ReelShort and DramaBox are named only as examples of the micro-drama category. They are not scored.
+| Band | Composite score |
+| --- | --- |
+| Category Dominant | 85 and up |
+| Strong Ecosystem Player | 70 to under 85 |
+| Emerging Power | 55 to under 70 |
+| Niche Player | 40 to under 55 |
+| Limited Structural Presence | below 40 |
+
+ReelShort and DramaBox appear only as examples of the micro-drama category. Neither one has a score.
 
 ## Concepts
 
@@ -75,18 +85,18 @@ ReelShort and DramaBox are named only as examples of the micro-drama category. T
 | 26 | The model registry and token counting | `demos/26-model-registry-and-tokens` | `guided/lessons/26-model-registry-and-tokens.md` |
 | 27 | Use Ruby | `demos/27-closing` | `guided/lessons/27-closing.md` |
 
-The tour's closing card has no demo directory. `demos/27-closing` is the install line and the links.
+The tour ends on a closing card with no code on it. `demos/27-closing` prints the install line and the links.
 
-## What stays a stand-in
+## Where the demos use stand-ins
 
-These are visible in the output, and the demo READMEs repeat them.
+Each demo labels its stand-in in the output, and the demo's README lists it again.
 
-* Rails streaming is an in-memory stand-in. The current generator job is `ChatResponseJob` with `chat.complete(&:broadcast)`. The tour showed `broadcast_append_chunk`.
-* The Linear server is declared and not connected. A local catalog MCP server answers `list_titles`.
-* Evaluations set `evaluator false`. A model does not grade the answers. The tour demo's sale-item case fails on purpose.
-* Judgments, OCR, rerank, speech, images, video, token counts, batch submit, and web-search citations hit the network only with the key and flag named above. Offline speech writes a silent WAV. The tour's "5 tokens" and a cache hit are not invented when the provider did not return them.
-* `clef-flash` on Ollama is mentioned and not called. It is not in the bundled registry.
+* The Rails streaming demo runs in memory without booting Rails. The current RubyLLM Rails generator writes a job named `ChatResponseJob` that calls `chat.complete(&:broadcast)`. The tour showed `broadcast_append_chunk`.
+* The MCP demo declares the Linear server and leaves it unconnected. A local catalog MCP server answers `list_titles`.
+* The evaluation demo sets `evaluator false`, so no model grades the answers. Its sale-item case fails on purpose.
+* The demos for judgments, OCR, rerank, speech, images, video, token counts, batch submit and web-search citations call the network only when the key and flag named above are set. Offline, the speech demo writes a silent WAV file. The demos print the tour's "5 tokens" figure and a cache hit only when the provider returns them.
+* `clef-flash` on Ollama is mentioned and never called, because the bundled registry doesn't include it.
 
 ## Tests
 
-`bundle exec rake test` is offline. GitHub Actions runs it on the newest Ruby 3.2 available to the runner. The suite checks the score boundaries, the catalog, that every demo exits 0, and that `bin/learn auto` finishes.
+`bundle exec rake test` runs offline. GitHub Actions runs the same suite on the newest Ruby 3.2 the runner offers. The tests check the score boundaries and the catalog, and they confirm that every demo exits 0 and that `bin/learn auto` finishes.
