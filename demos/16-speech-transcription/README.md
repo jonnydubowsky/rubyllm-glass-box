@@ -1,18 +1,18 @@
 # 16. Speech and transcription
 
-Speaks "Welcome to the show!", saves a WAV, and transcribes it. Offline the WAV is silence and the transcript is the source string copied back. The log says both providers were not called. Live speech uses OpenAI or ElevenLabs. Live transcription uses OpenAI.
+This demo turns "Welcome to the show!" into speech, saves it as a WAV file and transcribes the file. Offline, the WAV file holds silence, and the transcript is the source sentence copied back. The log says the demo called neither provider. In live mode, speech uses OpenAI or ElevenLabs, and transcription uses OpenAI.
 
 ## Run
 
 ```
-ruby demos/16-speech-transcription/run.rb
+GLASS_BOX_MODE=offline bin/demo 16
 ```
 
-Or `bin/demo 16`. `GLASS_BOX_MODE=offline` forces the stub and the fixtures. With the variable unset, a configured provider is used for the calls that this demo marks as live, and the rest stay on fixtures.
+You can also run `ruby demos/16-speech-transcription/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
 
 ## What to look at
 
-The script prints a banner with the mode and the gem version, then the request, tool calls, transcript, cost, or trace that this concept is about. Read those lines before the model's sentence.
+The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
 
 Docs: https://rubyllm.com/text-to-speech/
 

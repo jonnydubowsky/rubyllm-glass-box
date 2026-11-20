@@ -1,18 +1,18 @@
 # 19. OCR and moderation
 
-Runs OCR on `demos/fixtures/terms.pdf` and moderation on a short benign string. Offline OCR returns the markdown this course stored beside the PDF, and moderation returns `flagged?` false. Live OCR needs `MISTRAL_API_KEY`. Live moderation needs OpenAI. Cost is printed only when it is non-nil.
+This demo runs OCR on `demos/fixtures/terms.pdf` and moderation on a short, harmless string. Offline, OCR returns the markdown stored next to the PDF, and moderation returns `flagged?` as false. Live OCR needs `MISTRAL_API_KEY`, and live moderation needs OpenAI. The demo prints the cost only when it has a value.
 
 ## Run
 
 ```
-ruby demos/19-ocr-moderation/run.rb
+GLASS_BOX_MODE=offline bin/demo 19
 ```
 
-Or `bin/demo 19`. `GLASS_BOX_MODE=offline` forces the stub and the fixtures. With the variable unset, a configured provider is used for the calls that this demo marks as live, and the rest stay on fixtures.
+You can also run `ruby demos/19-ocr-moderation/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
 
 ## What to look at
 
-The script prints a banner with the mode and the gem version, then the request, tool calls, transcript, cost, or trace that this concept is about. Read those lines before the model's sentence.
+The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
 
 Docs: https://rubyllm.com/ocr/
 

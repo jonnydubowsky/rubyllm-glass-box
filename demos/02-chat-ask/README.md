@@ -1,18 +1,18 @@
 # 02. chat.ask starts a conversation
 
-`RubyLLM.chat` and one `chat.ask`. The prompt is the tour's unicorn sentence. The transcript and `chat.cost.total` are printed. Offline, both the reply and the cost come from `RubyLLM::TestHelper::Script`.
+This demo creates a chat with `RubyLLM.chat` and sends the tour's unicorn prompt with one `chat.ask` call. It prints the transcript and `chat.cost.total`. Offline, `RubyLLM::TestHelper::Script` supplies both the reply and the cost.
 
 ## Run
 
 ```
-ruby demos/02-chat-ask/run.rb
+GLASS_BOX_MODE=offline bin/demo 02
 ```
 
-Or `bin/demo 02`. `GLASS_BOX_MODE=offline` forces the stub and the fixtures. With the variable unset, a configured provider is used for the calls that this demo marks as live, and the rest stay on fixtures.
+You can also run `ruby demos/02-chat-ask/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
 
 ## What to look at
 
-The script prints a banner with the mode and the gem version, then the request, tool calls, transcript, cost, or trace that this concept is about. Read those lines before the model's sentence.
+The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
 
 Docs: https://rubyllm.com/chat/
 

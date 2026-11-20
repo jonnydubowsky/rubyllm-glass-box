@@ -1,18 +1,18 @@
 # 25. Compaction and the agentic loop
 
-`with_compaction(at: 50_000)`, `ask_later`, then `chat.step` until `complete?` or `waiting?`. The tool looks up The Last Lantern in the synthetic catalog and returns 48 episodes. The compaction threshold is printed. This short transcript does not cross it.
+This demo sets `with_compaction(at: 50_000)`, calls `ask_later` and then calls `chat.step` until the chat reports `complete?` or `waiting?`. The tool looks up The Last Lantern in the fictional catalog and returns 48 episodes. The demo prints the compaction threshold, which this short transcript never reaches.
 
 ## Run
 
 ```
-ruby demos/25-compaction-and-agentic-loop/run.rb
+GLASS_BOX_MODE=offline bin/demo 25
 ```
 
-Or `bin/demo 25`. `GLASS_BOX_MODE=offline` forces the stub and the fixtures. With the variable unset, a configured provider is used for the calls that this demo marks as live, and the rest stay on fixtures.
+You can also run `ruby demos/25-compaction-and-agentic-loop/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
 
 ## What to look at
 
-The script prints a banner with the mode and the gem version, then the request, tool calls, transcript, cost, or trace that this concept is about. Read those lines before the model's sentence.
+The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
 
 Docs: https://rubyllm.com/agentic-workflows/
 

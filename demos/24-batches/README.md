@@ -1,18 +1,18 @@
 # 24. Batches of chats
 
-Three `ask_later` chats, classified as help-desk lines. Prints each staged message. Does not call `RubyLLM.batch` unless `GLASS_BOX_MODE=live` and `GLASS_BOX_BATCH=1`. Mentions `chat.approve` beside `question.approve` so the two pauses are not mixed up.
+This demo stages three `ask_later` chats that classify help-desk lines and prints each staged message. It calls `RubyLLM.batch` only when `GLASS_BOX_MODE=live` and `GLASS_BOX_BATCH=1` are both set. It names `chat.approve` next to `question.approve` so a learner can tell the two pauses apart.
 
 ## Run
 
 ```
-ruby demos/24-batches/run.rb
+GLASS_BOX_MODE=offline bin/demo 24
 ```
 
-Or `bin/demo 24`. `GLASS_BOX_MODE=offline` forces the stub and the fixtures. With the variable unset, a configured provider is used for the calls that this demo marks as live, and the rest stay on fixtures.
+You can also run `ruby demos/24-batches/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
 
 ## What to look at
 
-The script prints a banner with the mode and the gem version, then the request, tool calls, transcript, cost, or trace that this concept is about. Read those lines before the model's sentence.
+The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
 
 Docs: https://rubyllm.com/batches/
 

@@ -1,18 +1,18 @@
 # 06. Attachments: a path, a URL, and mixed files
 
-Prints Marcel types for a PNG, a PDF, a text note, and a short MP4 stub, all under `demos/fixtures`. Passes those paths to `ask` with `with:`. Prints the tour's URL form and does not fetch it. The MP4 is not a playable clip. It exists so a path and a video MIME type are real.
+This demo uses four files in `demos/fixtures`. They are a PNG, a PDF, a text note and a short MP4 stub, and the demo prints the MIME type that Marcel detects for each one. It then passes the file paths to `ask` with `with:`. It also prints the URL form from the tour and leaves that URL unfetched. The MP4 file won't play. It is there so the demo has a real path with a video MIME type.
 
 ## Run
 
 ```
-ruby demos/06-attachments/run.rb
+GLASS_BOX_MODE=offline bin/demo 06
 ```
 
-Or `bin/demo 06`. `GLASS_BOX_MODE=offline` forces the stub and the fixtures. With the variable unset, a configured provider is used for the calls that this demo marks as live, and the rest stay on fixtures.
+You can also run `ruby demos/06-attachments/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
 
 ## What to look at
 
-The script prints a banner with the mode and the gem version, then the request, tool calls, transcript, cost, or trace that this concept is about. Read those lines before the model's sentence.
+The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
 
 Docs: https://rubyllm.com/attachments/
 

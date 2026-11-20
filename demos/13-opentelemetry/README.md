@@ -1,18 +1,18 @@
 # 13. Tracing a run with OpenTelemetry
 
-Calls `RubyLLM::OpenTelemetry.enable`, which needs the `opentelemetry-api` gem. A local subscriber records the same instrumentation events and prints a waterfall for a workflow step that calls `lookup_order`. Durations are from this process.
+This demo calls `RubyLLM::OpenTelemetry.enable`, which needs the `opentelemetry-api` gem. A local subscriber records the same instrumentation events and prints a waterfall chart for a workflow step that calls `lookup_order`. The durations come from the process that runs the demo.
 
 ## Run
 
 ```
-ruby demos/13-opentelemetry/run.rb
+GLASS_BOX_MODE=offline bin/demo 13
 ```
 
-Or `bin/demo 13`. `GLASS_BOX_MODE=offline` forces the stub and the fixtures. With the variable unset, a configured provider is used for the calls that this demo marks as live, and the rest stay on fixtures.
+You can also run `ruby demos/13-opentelemetry/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
 
 ## What to look at
 
-The script prints a banner with the mode and the gem version, then the request, tool calls, transcript, cost, or trace that this concept is about. Read those lines before the model's sentence.
+The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
 
 Docs: https://rubyllm.com/opentelemetry/
 

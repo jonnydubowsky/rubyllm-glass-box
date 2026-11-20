@@ -1,10 +1,10 @@
 # 17. Image and video generation
 
-`RubyLLM.paint` and `RubyLLM.animate` bill the provider as soon as they run, and a video render waits. This course does not call them just because a chat key exists.
+`RubyLLM.paint` and `RubyLLM.animate` charge your provider account as soon as they run, and a video render takes time. This course doesn't call them just because a chat key is set.
 
-Set `GLASS_BOX_PAID_MEDIA=1` and `GLASS_BOX_MODE=live` to paint. Paint uses OpenAI unless `RUBYLLM_IMAGE_MODEL` names another model. Animate also needs `XAI_API_KEY`, because the default video model is on xAI.
+To paint, set `GLASS_BOX_PAID_MEDIA=1` and `GLASS_BOX_MODE=live`. `paint` uses OpenAI unless `RUBYLLM_IMAGE_MODEL` names another model. `animate` also needs `XAI_API_KEY`, because the default video model runs on xAI.
 
-Without those, paint saves a one-pixel PNG and animate saves a text stand-in. Both logs say the provider was not called. Look at byte size and `model=offline-fixture` before you treat the file as a picture.
+Without those settings, `paint` saves a one-pixel PNG, `animate` saves a text stand-in, and both logs say the step didn't call the provider. Check the byte size and `model=offline-fixture` before you treat either file as a picture.
 
 ## Run
 
@@ -15,4 +15,4 @@ ruby demos/17-image-video-generation/run.rb
 
 Docs: https://rubyllm.com/image-generation/
 
-The standalone demo is the tour's example. The guided step uses the fictional catalog and the local score when the concept can carry a brand question. Weights, bands, and company rows are in `lib/glass_box/sbpi.rb` and `guided/data/catalog.yml`.
+The standalone demo runs the tour's own example. The guided step asks about a fictional brand wherever the concept allows it, and local Ruby code scores that brand. The weights and bands are in `lib/glass_box/sbpi.rb`, and the company rows are in `guided/data/catalog.yml`.

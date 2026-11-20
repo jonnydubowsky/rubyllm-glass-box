@@ -1,10 +1,10 @@
 # 06. Attachments: a path, a URL, and mixed files
 
-`chat.ask` takes `with:` as a path, a URL, or a list of mixed files. The tour shows each form. This step attaches `demos/fixtures/notes.txt` and prints the MIME type Marcel reports for that path.
+`chat.ask` takes `with:` as a path, a URL or a list of mixed files, and the tour shows each form. This step attaches `demos/fixtures/notes.txt` and prints the MIME type that Marcel reports for that path.
 
-The URL form is valid. Nothing in this step fetches a URL. The offline reply states the title and the episode count. Those facts are also in the note file, which the log prints by path and byte size so you can see what was handed to the chat.
+The URL form is valid, and nothing in this step fetches a URL. The offline reply gives the title and the episode count. The note file holds the same facts, and the log prints the file's path and size in bytes so you can see what the step handed to the chat.
 
-Look at the `attached` line, then the attachment list the demo prints from `chat.messages`. The demo also passes a PNG, a PDF, and a short MP4 stub.
+Read the `attached` line, and then read the attachment list that the demo prints from `chat.messages`. The demo also attaches a PNG, a PDF and a short MP4 stub.
 
 ## Run
 
@@ -15,4 +15,4 @@ ruby demos/06-attachments/run.rb
 
 Docs: https://rubyllm.com/attachments/
 
-The standalone demo is the tour's example. The guided step uses the fictional catalog and the local score when the concept can carry a brand question. Weights, bands, and company rows are in `lib/glass_box/sbpi.rb` and `guided/data/catalog.yml`.
+The standalone demo runs the tour's own example. The guided step asks about a fictional brand wherever the concept allows it, and local Ruby code scores that brand. The weights and bands are in `lib/glass_box/sbpi.rb`, and the company rows are in `guided/data/catalog.yml`.

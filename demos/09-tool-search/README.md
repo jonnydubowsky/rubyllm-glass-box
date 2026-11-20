@@ -1,18 +1,18 @@
 # 09. Tool search and an MCP App approval
 
-Deferred tools on `gemini-3.7-flash`, because that provider does not do server-side tool search, so the gem adds local `tool_search`. The query `select:create_catalog_note` loads the write tool, which waits on approval. Approve with `GLASS_BOX_APPROVE=yes` or by typing yes. The tour's MCP App panel is not opened. Approval is `question.approve`, not `agent.approve`.
+This demo defers its tools on `gemini-3.7-flash`. That provider has no server-side tool search, so the gem adds a local `tool_search` tool. The query `select:create_catalog_note` loads the write tool, which then waits for approval. To approve it, set `GLASS_BOX_APPROVE=yes` or type yes. The demo leaves the tour's MCP App panel closed. It approves with `question.approve`, the current name for the tour's `agent.approve`.
 
 ## Run
 
 ```
-ruby demos/09-tool-search/run.rb
+GLASS_BOX_MODE=offline bin/demo 09
 ```
 
-Or `bin/demo 09`. `GLASS_BOX_MODE=offline` forces the stub and the fixtures. With the variable unset, a configured provider is used for the calls that this demo marks as live, and the rest stay on fixtures.
+You can also run `ruby demos/09-tool-search/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
 
 ## What to look at
 
-The script prints a banner with the mode and the gem version, then the request, tool calls, transcript, cost, or trace that this concept is about. Read those lines before the model's sentence.
+The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
 
 Docs: https://rubyllm.com/tool-search/
 

@@ -1,10 +1,10 @@
 # 25. Compaction and the agentic loop
 
-`with_compaction(at:)` sets a token threshold for shrinking history. `ask_later` queues the user message. `chat.step` runs one beat of the loop: the model turn, the tool, or the next model turn. You stop when `complete?` or `waiting?` is true.
+`with_compaction(at:)` sets the token count at which the gem shrinks the history. `ask_later` queues the user message. Each `chat.step` call runs one part of the loop, which is the model's turn, the tool, or the model's next turn. The loop stops when `complete?` or `waiting?` returns true.
 
-The question is how many episodes Room 4B has. The tool returns Copperframe, 12 episodes, and the logline. The threshold printed here is 50_000. The transcript is short, so compaction does not rewrite it. The setting is still visible on `chat.compaction`.
+The learner's question is how many episodes Room 4B has. The tool returns Copperframe, 12 episodes and the logline. The step prints a threshold of 50_000. The transcript is short, so compaction never rewrites it, and `chat.compaction` still shows the setting.
 
-Look at the step numbers and the tool result. The episode count is in the result hash.
+Read the step numbers and the tool result. The episode count comes from the result hash.
 
 ## Run
 
@@ -15,4 +15,4 @@ ruby demos/25-compaction-and-agentic-loop/run.rb
 
 Docs: https://rubyllm.com/agentic-workflows/
 
-The standalone demo is the tour's example. The guided step uses the fictional catalog and the local score when the concept can carry a brand question. Weights, bands, and company rows are in `lib/glass_box/sbpi.rb` and `guided/data/catalog.yml`.
+The standalone demo runs the tour's own example. The guided step asks about a fictional brand wherever the concept allows it, and local Ruby code scores that brand. The weights and bands are in `lib/glass_box/sbpi.rb`, and the company rows are in `guided/data/catalog.yml`.

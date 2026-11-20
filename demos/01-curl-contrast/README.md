@@ -1,18 +1,18 @@
 # 01. A raw provider request next to RubyLLM
 
-Prints a curl command and does not send it. Parses `demos/fixtures/openai_response.json`, finds the output item with type message, and prints that text. Then `chat.ask` runs the unicorn prompt from the tour. Offline, the reply is the fixture sentence. Live, `chat.ask` calls the provider.
+This demo prints the tour's curl command without sending it. It then reads the saved provider response in `demos/fixtures/openai_response.json`, finds the output item of type message, and prints its text. Finally, it sends the tour's unicorn prompt through `chat.ask`. Offline, the reply is the sentence stored in the fixture. In live mode, `chat.ask` calls the provider.
 
 ## Run
 
 ```
-ruby demos/01-curl-contrast/run.rb
+GLASS_BOX_MODE=offline bin/demo 01
 ```
 
-Or `bin/demo 01`. `GLASS_BOX_MODE=offline` forces the stub and the fixtures. With the variable unset, a configured provider is used for the calls that this demo marks as live, and the rest stay on fixtures.
+You can also run `ruby demos/01-curl-contrast/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
 
 ## What to look at
 
-The script prints a banner with the mode and the gem version, then the request, tool calls, transcript, cost, or trace that this concept is about. Read those lines before the model's sentence.
+The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
 
 Docs: https://rubyllm.com/getting-started/
 

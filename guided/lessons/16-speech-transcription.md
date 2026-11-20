@@ -1,10 +1,10 @@
 # 16. Speech and transcription
 
-`RubyLLM.speak` returns audio. `RubyLLM.transcribe` returns text. The sentence in this step is built from Night Bazaar's composite and band, 85.9 and Category Dominant, so the words you hear about are the scorer's words.
+`RubyLLM.speak` returns audio, and `RubyLLM.transcribe` returns text. The step builds its sentence from Night Bazaar's composite of 85.9 and its band, Category Dominant, so every word about the score comes from the scorer.
 
-Offline, speak writes a silent WAV and the log says so. Transcribe returns the source sentence. It does not read the WAV. The string match is a check that the fixture echoed the source, not a check that the file contains speech.
+Offline, `speak` writes a silent WAV file, and the log says so. `transcribe` returns the source sentence without reading the WAV file. The string match checks that the fixture echoed the source sentence. It does not check the file for speech.
 
-Live speech uses OpenAI, or ElevenLabs when that is the configured speech path and OpenAI is absent. Live transcription uses OpenAI. The saved file is `tmp/learn/speech.wav`.
+Live speech uses OpenAI, or ElevenLabs when ElevenLabs is the configured speech path and OpenAI is absent. Live transcription uses OpenAI. The step saves the file as `tmp/learn/speech.wav`.
 
 ## Run
 
@@ -15,4 +15,4 @@ ruby demos/16-speech-transcription/run.rb
 
 Docs: https://rubyllm.com/text-to-speech/
 
-The standalone demo is the tour's example. The guided step uses the fictional catalog and the local score when the concept can carry a brand question. Weights, bands, and company rows are in `lib/glass_box/sbpi.rb` and `guided/data/catalog.yml`.
+The standalone demo runs the tour's own example. The guided step asks about a fictional brand wherever the concept allows it, and local Ruby code scores that brand. The weights and bands are in `lib/glass_box/sbpi.rb`, and the company rows are in `guided/data/catalog.yml`.

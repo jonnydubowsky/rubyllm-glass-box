@@ -1,10 +1,10 @@
 # 22. Extended thinking and provider web search
 
-`with_thinking(effort: :high)` and `with_provider_tools(:web_search)` are chat settings you can print before the request. The effort value on this gem is the symbol you passed.
+`with_thinking(effort: :high)` and `with_provider_tools(:web_search)` are chat settings, and you can print them before the request. On this gem, the effort value is the symbol you passed in.
 
-Web search is not available on every model. The call is rescued when the gem raises `UnsupportedServerToolError` or another `RubyLLM::Error`, and the log shows the class and message. The thinking setting remains on the chat.
+Some models don't offer web search. When the gem raises `UnsupportedServerToolError` or another `RubyLLM::Error`, the step rescues the error and logs its class and message. The thinking setting stays on the chat.
 
-Offline citations on the stubbed message are empty. A recorded citation about Ruby is printed underneath and labeled as not from this response. Do not treat that card as `response.citations`.
+Offline, the stubbed message has no citations. Under it, the step prints a recorded citation about Ruby and labels it as coming from outside this response. Keep that card separate from `response.citations`.
 
 ## Run
 
@@ -15,4 +15,4 @@ ruby demos/22-thinking-and-provider-tools/run.rb
 
 Docs: https://rubyllm.com/thinking/
 
-The standalone demo is the tour's example. The guided step uses the fictional catalog and the local score when the concept can carry a brand question. Weights, bands, and company rows are in `lib/glass_box/sbpi.rb` and `guided/data/catalog.yml`.
+The standalone demo runs the tour's own example. The guided step asks about a fictional brand wherever the concept allows it, and local Ruby code scores that brand. The weights and bands are in `lib/glass_box/sbpi.rb`, and the company rows are in `guided/data/catalog.yml`.

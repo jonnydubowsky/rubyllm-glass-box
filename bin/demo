@@ -24,7 +24,7 @@ fi
 
 target="$1"
 if [[ "$target" == "all" ]]; then
-  for dir in demos/*/; do
+  for dir in demos/[0-9][0-9]-*/; do
     run_dir "${dir%/}"
   done
   exit 0
@@ -36,7 +36,10 @@ if [[ -f "demos/$target/run.rb" ]]; then
 fi
 
 shopt -s nullglob
-matches=(demos/"$(printf '%02d' "$target" 2>/dev/null || true)"-*/run.rb)
+matches=()
+if [[ "$target" =~ ^[0-9]+$ ]]; then
+  matches=(demos/"$(printf '%02d' "$((10#$target))")"-*/run.rb)
+fi
 if [[ ${#matches[@]} -eq 1 ]]; then
   run_dir "$(dirname "${matches[0]}")"
   exit 0

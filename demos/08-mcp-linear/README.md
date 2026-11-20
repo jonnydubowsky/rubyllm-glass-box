@@ -1,18 +1,18 @@
 # 08. An MCP server declared as a Ruby class
 
-Declares `Linear < RubyLLM::MCP` with the current DSL (`url`, `inputs`, `oauth`, `only`, `requires_approval`, `extension :apps`) and does not connect. Then opens `CatalogMCP`, a local transport, and calls `list_titles` for Lantern Reel. `create_note` stays behind approval and is not invoked.
+This demo declares `Linear < RubyLLM::MCP` with the current DSL, using `url`, `inputs`, `oauth`, `only`, `requires_approval` and `extension :apps`, and never connects to Linear. It then opens `CatalogMCP`, a local transport, and calls `list_titles` for Lantern Reel. The `create_note` tool needs approval, and the demo never calls it.
 
 ## Run
 
 ```
-ruby demos/08-mcp-linear/run.rb
+GLASS_BOX_MODE=offline bin/demo 08
 ```
 
-Or `bin/demo 08`. `GLASS_BOX_MODE=offline` forces the stub and the fixtures. With the variable unset, a configured provider is used for the calls that this demo marks as live, and the rest stay on fixtures.
+You can also run `ruby demos/08-mcp-linear/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
 
 ## What to look at
 
-The script prints a banner with the mode and the gem version, then the request, tool calls, transcript, cost, or trace that this concept is about. Read those lines before the model's sentence.
+The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
 
 Docs: https://rubyllm.com/mcp/
 

@@ -1,18 +1,18 @@
 # 17. Image and video generation
 
-The prompt is the tour's red panda. Files land in `tmp/demos/17-image-video-generation`. Paint and animate stay on fixtures unless `GLASS_BOX_PAID_MEDIA=1` and you are live. Paint then needs OpenAI, or `RUBYLLM_IMAGE_MODEL`. Animate needs `XAI_API_KEY`. The fixture PNG is one pixel. The fixture video is not playable.
+This demo uses the tour's red panda prompt and saves its files in `tmp/demos/17-image-video-generation`. `paint` and `animate` use fixtures unless the demo runs live with `GLASS_BOX_PAID_MEDIA=1`. In that case, `paint` needs OpenAI or a `RUBYLLM_IMAGE_MODEL`, and `animate` needs `XAI_API_KEY`. The fixture PNG is one pixel, and the fixture video won't play.
 
 ## Run
 
 ```
-ruby demos/17-image-video-generation/run.rb
+GLASS_BOX_MODE=offline bin/demo 17
 ```
 
-Or `bin/demo 17`. `GLASS_BOX_MODE=offline` forces the stub and the fixtures. With the variable unset, a configured provider is used for the calls that this demo marks as live, and the rest stay on fixtures.
+You can also run `ruby demos/17-image-video-generation/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
 
 ## What to look at
 
-The script prints a banner with the mode and the gem version, then the request, tool calls, transcript, cost, or trace that this concept is about. Read those lines before the model's sentence.
+The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
 
 Docs: https://rubyllm.com/image-generation/
 

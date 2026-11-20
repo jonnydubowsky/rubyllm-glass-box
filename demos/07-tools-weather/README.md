@@ -1,18 +1,18 @@
 # 07. A Ruby tool the model can call
 
-A `Weather` tool with `execute(latitude:, longitude:)`, matching the tour. The body calls a local hash, not a weather API. The stubbed call uses Berlin's coordinates from the tour, 52.52 and 13.41. The transcript shows the tool call, the hash, and the sentence.
+This demo defines a `Weather` tool with `execute(latitude:, longitude:)`, as the tour does. The tool reads its answer from a local hash and never calls a weather API. The scripted call uses the tour's coordinates for Berlin, 52.52 and 13.41. The transcript shows the tool call, the hash the tool returns and the model's reply.
 
 ## Run
 
 ```
-ruby demos/07-tools-weather/run.rb
+GLASS_BOX_MODE=offline bin/demo 07
 ```
 
-Or `bin/demo 07`. `GLASS_BOX_MODE=offline` forces the stub and the fixtures. With the variable unset, a configured provider is used for the calls that this demo marks as live, and the rest stay on fixtures.
+You can also run `ruby demos/07-tools-weather/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
 
 ## What to look at
 
-The script prints a banner with the mode and the gem version, then the request, tool calls, transcript, cost, or trace that this concept is about. Read those lines before the model's sentence.
+The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
 
 Docs: https://rubyllm.com/tools/
 

@@ -1,10 +1,10 @@
 # 20. Faster by default in RubyLLM 2.1
 
-The tour's card lists four measurements for RubyLLM 2.1 against 2.0: streaming 500 Anthropic deltas in 4.1 ms, a 2 MB event in 2.0 ms, 0.48 MB kept by a 40-turn streamed chat, and 32 ms to load the registry on eight threads.
+The tour's card lists four measurements that compare RubyLLM 2.1 with 2.0. Streaming 500 Anthropic deltas takes 4.1 ms, and streaming a 2 MB event takes 2.0 ms. A streamed chat of 40 turns keeps 0.48 MB in memory, and eight threads load the model registry in 32 ms.
 
-This step prints that card and the installed gem version. It does not run a benchmark, and it does not claim those timings for 2.2.3. The docs page is the source.
+This step prints that card and the installed gem version. It runs no benchmark and makes no claim that 2.2.3 matches those timings. The RubyLLM docs page is the source for the numbers.
 
-The brand composite stays a local sum, so scoring a company does not wait on a model round trip. That is the workshop point of the card, separate from the published timings.
+The brand composite is a local sum, so scoring a company never waits on a round trip to a model. The workshop uses this card to make that point. The published timings are a separate matter.
 
 ## Run
 
@@ -15,4 +15,4 @@ ruby demos/20-faster-by-default/run.rb
 
 Docs: https://rubyllm.com/whats-new-in-2-1/
 
-The standalone demo is the tour's example. The guided step uses the fictional catalog and the local score when the concept can carry a brand question. Weights, bands, and company rows are in `lib/glass_box/sbpi.rb` and `guided/data/catalog.yml`.
+The standalone demo runs the tour's own example. The guided step asks about a fictional brand wherever the concept allows it, and local Ruby code scores that brand. The weights and bands are in `lib/glass_box/sbpi.rb`, and the company rows are in `guided/data/catalog.yml`.

@@ -1,18 +1,18 @@
 # 12. Evaluating an agent against a dataset
 
-`evaluator false`, so a Ruby assertion grades the cases and the chat model does not. The agent is wrong on sale items. That case fails, `passed?` is false, and the script still exits 0. The report is `tmp/evaluations/FaqEvaluation.json`. The tour leaves the evaluator on and asks a model whether the answer matches. This demo does not.
+This demo sets `evaluator false`, so a Ruby assertion grades each case and the chat model grades none. The agent gives the wrong answer about sale items. That case fails and `passed?` returns false, but the script still exits 0. The demo writes its report to `tmp/evaluations/FaqEvaluation.json`. The tour leaves the evaluator on and asks a model whether each answer matches, and this demo turns that off.
 
 ## Run
 
 ```
-ruby demos/12-evaluations/run.rb
+GLASS_BOX_MODE=offline bin/demo 12
 ```
 
-Or `bin/demo 12`. `GLASS_BOX_MODE=offline` forces the stub and the fixtures. With the variable unset, a configured provider is used for the calls that this demo marks as live, and the rest stay on fixtures.
+You can also run `ruby demos/12-evaluations/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
 
 ## What to look at
 
-The script prints a banner with the mode and the gem version, then the request, tool calls, transcript, cost, or trace that this concept is about. Read those lines before the model's sentence.
+The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
 
 Docs: https://rubyllm.com/evaluations/
 
