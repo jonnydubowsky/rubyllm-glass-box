@@ -8,8 +8,9 @@ GlassBox.banner "16  Speech and transcription"
 
 line = "Welcome to the show!"
 dir = GlassBox.output_dir("16-speech-transcription")
-path = dir.join("speech.wav")
 speech = GlassBox.speak(line)
+# A provider returns mp3 by default, and the offline stand-in is a WAV file.
+path = dir.join("speech.#{speech.format}")
 speech.save(path.to_s)
 transcript = GlassBox.transcribe(path.to_s, expected_text: line)
 GlassBox.log "source", line

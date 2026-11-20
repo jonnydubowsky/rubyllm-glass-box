@@ -1,49 +1,67 @@
 #!/usr/bin/env bash
 # Run one tour demo, or every demo.
-#   bin/demo 02
-#   bin/demo 02-chat-ask
-#   bin/demo all
+#   bin/demo 8                     by number
+#   bin/demo 08                    a leading zero is fine
+#   bin/demo 08-mcp-linear         by folder name
+#   bin/demo demos/08-mcp-linear   by path
+#   bin/demo all                   every demo, in order
+#   bin/demo list                  print the folder names
 set -euo pipefail
 cd "$(dirname "$0")/.."
+shopt -s nullglob
+
+usage() {
+  echo "Usage: bin/demo <number|folder|all|list>" >&2
+  echo "Example: GLASS_BOX_MODE=offline bin/demo 02" >&2
+}
 
 run_dir() {
-  local dir="$1"
-  if [[ ! -f "$dir/run.rb" ]]; then
-    echo "No demo at $dir" >&2
-    exit 1
-  fi
-  echo "---- $dir ----"
-  bundle exec ruby "$dir/run.rb"
+  echo "---- $1 ----"
+  bundle exec ruby "$1/run.rb"
 }
 
 if [[ $# -lt 1 ]]; then
-  echo "Usage: bin/demo <number|directory|all>" >&2
-  echo "Example: GLASS_BOX_MODE=offline bin/demo 02" >&2
+  usage
   exit 1
 fi
 
-target="$1"
-if [[ "$target" == "all" ]]; then
-  for dir in demos/[0-9][0-9]-*/; do
-    run_dir "${dir%/}"
-  done
-  exit 0
+# Numbered folders only, so demos/fixtures is never treated as a demo.
+demos=(demos/[0-9][0-9]-*/run.rb)
+
+target="${1#demos/}"
+target="${target%/}"
+
+case "$target" in
+  all)
+    for script in "${demos[@]}"; do
+      run_dir "$(dirname "$script")"
+    done
+    exit 0
+    ;;
+  list)
+    for script in "${demos[@]}"; do
+      basename "$(dirname "$script")"
+    done
+    exit 0
+    ;;
+esac
+
+if [[ "$target" =~ ^[0-9]+$ ]]; then
+  # 10# reads the digits as base 10. Without it, bash reads 08 as bad octal.
+  number="$(printf '%02d' "$((10#$target))")"
+  matches=(demos/"$number"-*/run.rb)
+  if [[ ${#matches[@]} -eq 1 ]]; then
+    run_dir "$(dirname "${matches[0]}")"
+    exit 0
+  fi
+  echo "No demo has the number $target. The demos run from 01 to $(printf '%02d' "${#demos[@]}")." >&2
+  exit 1
 fi
 
-if [[ -f "demos/$target/run.rb" ]]; then
+if [[ "$target" =~ ^[0-9][0-9]- && -f "demos/$target/run.rb" ]]; then
   run_dir "demos/$target"
   exit 0
 fi
 
-shopt -s nullglob
-matches=()
-if [[ "$target" =~ ^[0-9]+$ ]]; then
-  matches=(demos/"$(printf '%02d' "$((10#$target))")"-*/run.rb)
-fi
-if [[ ${#matches[@]} -eq 1 ]]; then
-  run_dir "$(dirname "${matches[0]}")"
-  exit 0
-fi
-
-echo "No demo matches '$target'." >&2
+echo "No demo matches '$1'. Run bin/demo list to see the folder names." >&2
 exit 1

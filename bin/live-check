@@ -1,0 +1,61 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Run every demo against real providers and print one row per demo.
+#   bin/live-check          all 27 demos
+#   bin/live-check 11 16    only these demos
+#
+# This script spends money on the provider accounts whose keys are in .env or
+# in the environment. It leaves GLASS_BOX_PAID_MEDIA and GLASS_BOX_BATCH alone,
+# so image generation, video generation and batch submission stay off unless
+# you set those variables yourself. Each demo's full output is saved under
+# tmp/live-check.
+
+require "fileutils"
+require "open3"
+require_relative "../lib/glass_box"
+
+GlassBox.boot!
+
+KEY_NAMES = %w[
+  OPENAI_API_KEY ANTHROPIC_API_KEY GEMINI_API_KEY GOOGLE_API_KEY OPENROUTER_API_KEY
+  XAI_API_KEY COHERE_API_KEY MISTRAL_API_KEY TYPESAFE_API_KEY ELEVENLABS_API_KEY
+].freeze
+
+set = KEY_NAMES.select { |name| GlassBox.present?(ENV[name]) }
+puts "Keys set (names only): #{set.empty? ? "none" : set.join(", ")}"
+puts "Paid media: #{GlassBox.paid_media? ? "on" : "off"}. Batch submission: #{ENV["GLASS_BOX_BATCH"] == "1" ? "on" : "off"}."
+if set.empty?
+  warn "No provider key is set, so there is nothing to check. Add a key to .env first."
+  exit 1
+end
+puts
+
+out_dir = GlassBox::ROOT.join("tmp/live-check")
+FileUtils.mkdir_p(out_dir)
+wanted = ARGV.map { |arg| format("%02d", Integer(arg, 10)) }
+scripts = Dir[GlassBox::ROOT.join("demos/[0-9][0-9]-*/run.rb").to_s].sort
+scripts.select! { |script| wanted.include?(File.basename(File.dirname(script))[0, 2]) } unless wanted.empty?
+
+env = { "GLASS_BOX_MODE" => "live", "GLASS_BOX_APPROVE" => ENV.fetch("GLASS_BOX_APPROVE", "yes") }
+failures = 0
+puts format("%-34s %-6s %-9s %-8s %s", "demo", "exit", "provider", "fixture", "cost or first error")
+scripts.each do |script|
+  slug = File.basename(File.dirname(script))
+  output, status = Open3.capture2e(env, "bundle", "exec", "ruby", script, chdir: GlassBox::ROOT.to_s)
+  out_dir.join("#{slug}.out").write(output)
+  lines = output.lines.map(&:chomp)
+  provider_calls = lines.count("[provider]") + lines.count("[request]")
+  fixtures = lines.count("[fixture]")
+  note = if status.success?
+           lines.grep(/\Achat\.cost\.total/).last.to_s
+         else
+           failures += 1
+           lines.grep(/Error: /).first.to_s[0, 90]
+         end
+  puts format("%-34s %-6s %-9d %-8d %s", slug, status.exitstatus, provider_calls, fixtures, note)
+end
+puts
+puts "The provider column counts requests that reached a provider. The fixture column counts calls that used a local stand-in."
+puts "Full output: #{out_dir}"
+exit(failures.zero? ? 0 : 1)

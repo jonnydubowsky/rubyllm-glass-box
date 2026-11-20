@@ -1,17 +1,27 @@
 # 15. Nineteen providers, one Ruby API
 
-`RubyLLM.chat(model:)` and `RubyLLM.chat(model:, provider:)` are the same call against different registries. The tour prints three constructor lines and counts 19 providers. This gem's registry lists 23 slugs, and the four that the tour's card lacks are meta, minimax, moonshot and zai. The step prints the current list from `RubyLLM::Provider.providers`.
+## The concept
 
-The step asks three chats, on OpenAI, Anthropic and Gemini, for Copperframe's band. Each sentence includes Copperframe's composite of 30.75 and its band, Limited Structural Presence, which Ruby computed before the ask. In live mode, the step skips any provider that is not configured. Offline, the stub skips the key check, so all three lines print.
+`RubyLLM.chat(model:)` returns the same kind of chat object for every provider. The gem looks the model id up in its registry to find the provider. `provider:` names the provider yourself, which matters when several providers serve the same model. Every later call, such as `ask`, is the same for each provider.
 
-The demo also creates a Bedrock chat. In live mode, that constructor needs `BEDROCK_API_KEY`, `BEDROCK_SECRET_KEY` and `BEDROCK_REGION`. Offline, the stub lets it run without them.
+The tour prints three constructor lines and counts 19 providers. This gem's registry lists 23 slugs, and the four that the tour's card lacks are meta, minimax, moonshot and zai.
+
+## What this step does
+
+The step prints the current provider list from `RubyLLM::Provider.providers`. It then sends one prompt to three chats, on OpenAI, Anthropic and Gemini: "Copperframe has a composite of 30.75 in the Limited Structural Presence band. Say so in one sentence." Ruby computed the composite and the band before the ask. In live mode, the step skips any provider that is not configured. Offline, the stub skips the key check, so all three lines print.
+
+## What to look at
+
+Count the slugs in the provider list. Then read the reply lines, one per provider, and check each against the prompt. `demos/15-providers-one-api` also creates a Bedrock chat. In live mode, that constructor needs `BEDROCK_API_KEY`, `BEDROCK_SECRET_KEY` and `BEDROCK_REGION`.
 
 ## Run
 
 ```
-bin/learn run 15
-ruby demos/15-providers-one-api/run.rb
+bin/learn 15
+GLASS_BOX_MODE=offline bin/demo 15
 ```
+
+`bin/learn 15` prints this lesson and then runs the step. `bin/demo 15` runs the standalone demo in `demos/15-providers-one-api`.
 
 Docs: https://rubyllm.com/models/
 

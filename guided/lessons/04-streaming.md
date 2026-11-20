@@ -1,17 +1,25 @@
 # 04. Streaming tokens with a block
 
-When you pass a block to `ask`, the block receives each chunk. `chunk.content` holds only the text that arrived in that chunk.
+## The concept
 
-The sentence in this step names Distribution Power and its weight in `GlassBox::SBPI`, 0.25, the largest of the five weights. The program prints each chunk as it arrives. Offline, the test helper splits the scripted sentence into words. Those words stand in for a provider's deltas, and they are still the words the program queued.
+When you pass a block to `ask`, the gem calls the block once for each chunk of the reply as it arrives. `chunk.content` holds only the text that arrived in that chunk. `ask` still returns the complete reply when the stream ends.
 
-Watch the `stream:` line grow as chunks arrive. The demo uses the same block on a shorter prompt.
+## What this step does
+
+The step sends this prompt and prints each chunk as it arrives: "Distribution Power has a weight of 0.25, the largest of the five weights. Write one sentence that says so." The weight comes from `GlassBox::SBPI`. Offline, the test helper splits the scripted sentence into words and pauses briefly between them. Those words stand in for a provider's deltas.
+
+## What to look at
+
+Watch the `stream:` line grow as chunks arrive. Then check the weight in the sentence against the weight in the prompt. `demos/04-streaming` passes the same kind of block with the tour's haiku prompt.
 
 ## Run
 
 ```
-bin/learn run 4
-ruby demos/04-streaming/run.rb
+bin/learn 4
+GLASS_BOX_MODE=offline bin/demo 4
 ```
+
+`bin/learn 4` prints this lesson and then runs the step. `bin/demo 4` runs the standalone demo in `demos/04-streaming`.
 
 Docs: https://rubyllm.com/streaming/
 

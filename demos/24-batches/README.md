@@ -8,11 +8,15 @@ This demo stages three `ask_later` chats that classify help-desk lines and print
 GLASS_BOX_MODE=offline bin/demo 24
 ```
 
-You can also run `ruby demos/24-batches/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
+You can also run `ruby demos/24-batches/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset and you have set a chat key, the demo runs live.
+
+## What a live run sends
+
+A live run submits nothing unless you also set `GLASS_BOX_BATCH=1`. With that flag, the demo submits one batch of three chats to your default provider, and the results arrive later.
 
 ## What to look at
 
-The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
+Each `staged` line shows a chat whose last message has the role user and has gone to no provider. The final lines say whether the demo called `RubyLLM.batch`.
 
 Docs: https://rubyllm.com/batches/
 

@@ -8,11 +8,17 @@ module GlassBox
 
     # A short local vector so a demo can print Embedding#vectors with no provider.
     # It is not a model embedding. The bytes of the text pick the numbers.
+    # One string gets one flat vector. An array gets one vector per string,
+    # which is the shape RubyLLM.embed returns.
     def embedding(text)
+      vectors = text.is_a?(Array) ? text.map { |item| byte_vector(item) } : byte_vector(text)
+      RubyLLM::Embedding.new(vectors: vectors, model: "offline-fixture")
+    end
+
+    def byte_vector(text)
       bytes = text.to_s.bytes
       bytes = [0] if bytes.empty?
-      vectors = Array.new(8) { |index| ((bytes[index % bytes.length] - 96) / 100.0).round(4) }
-      RubyLLM::Embedding.new(vectors: vectors, model: "offline-fixture")
+      Array.new(8) { |index| ((bytes[index % bytes.length] - 96) / 100.0).round(4) }
     end
 
     def rerank(query, documents)
@@ -44,13 +50,17 @@ module GlassBox
       )
     end
 
-    def judgment_ticket
+    # A recorded judgment for a support ticket. department: is the label the
+    # stand-in picks, so a billing ticket and a playback ticket each get a
+    # plausible desk.
+    def judgment_ticket(department: :billing)
+      others = %i[billing technical other] - [department]
       RubyLLM::Judgment.new(
         answers: {
           urgent: RubyLLM::Probability.new(probability: 0.97),
           department: RubyLLM::Choice.new(
-            choice: :billing,
-            probabilities: { billing: 0.91, technical: 0.06, other: 0.03 },
+            choice: department,
+            probabilities: { department => 0.91, others[0] => 0.06, others[1] => 0.03 },
             confidence: 0.91
           )
         },

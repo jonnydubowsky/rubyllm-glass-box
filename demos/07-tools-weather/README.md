@@ -8,11 +8,15 @@ This demo defines a `Weather` tool with `execute(latitude:, longitude:)`, as the
 GLASS_BOX_MODE=offline bin/demo 07
 ```
 
-You can also run `ruby demos/07-tools-weather/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
+You can also run `ruby demos/07-tools-weather/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset and you have set a chat key, the demo runs live.
+
+## What a live run sends
+
+A live run sends chat requests to your default chat model until the model has answered. The offline run makes two, one that returns the tool call and one that returns the reply. A live model decides for itself whether to call the tool. The tool never calls a weather API.
 
 ## What to look at
 
-The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
+`[tool call]` shows the arguments the model chose, 52.52 and 13.41. `[tool result]` is the hash that `Weather#execute` returned. In the transcript, the tool's message sits between the two assistant messages, and the final sentence takes its 18°C from that hash.
 
 Docs: https://rubyllm.com/tools/
 

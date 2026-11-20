@@ -1,17 +1,27 @@
 # 03. The same chat remembers the last turn
 
-A second `ask` on the same chat object continues the conversation, so you don't rebuild a message array.
+## The concept
 
-The first turn summarizes The Last Lantern, and the second turn asks how it compares with Stall Seven. After the second ask, the program prints the role of every message. That list is the history the next request would carry. The episode counts, 48 and 120, come from the catalog.
+A chat object keeps every message of the conversation. A second `ask` on the same chat sends the earlier turns along with the new prompt, so you don't rebuild a message array.
 
-The roles print in the order user, assistant, user, assistant. The second user message never repeats the first title, because the chat object still holds the first turn.
+## What this step does
+
+The step calls `ask` twice on one chat. The first prompt starts with "In one sentence, summarize this fictional series:" and includes the blurb for The Last Lantern. The second prompt starts with "Compare it with this one:" and includes the blurb for Stall Seven. The word "it" in the second prompt refers to The Last Lantern, and the model can resolve that word only from the first turn.
+
+After the second ask, the step prints every message on the chat with its role. The episode counts in the offline replies, 48 and 120, come from the catalog.
+
+## What to look at
+
+The roles print in the order user, assistant, user, assistant. That list is the history the next request would carry. The second user message never names The Last Lantern, because the chat object still holds the first turn. The cost line shows the total for both asks.
 
 ## Run
 
 ```
-bin/learn run 3
-ruby demos/03-conversation-memory/run.rb
+bin/learn 3
+GLASS_BOX_MODE=offline bin/demo 3
 ```
+
+`bin/learn 3` prints this lesson and then runs the step. `bin/demo 3` runs the standalone demo in `demos/03-conversation-memory`.
 
 Docs: https://rubyllm.com/chat/
 

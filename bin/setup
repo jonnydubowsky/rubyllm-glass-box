@@ -1,7 +1,20 @@
 #!/usr/bin/env bash
-# Install gems and create a local .env if you do not have one.
+# Check the Ruby version, install the gems, and create a local .env file.
 set -euo pipefail
 cd "$(dirname "$0")/.."
+
+if ! command -v ruby >/dev/null 2>&1; then
+  echo "Ruby is not installed. This course needs Ruby 3.2.3 or newer." >&2
+  echo "On a Mac: brew install ruby, or install rbenv and run rbenv install 3.4.2." >&2
+  exit 1
+fi
+
+if ! ruby -e 'exit(Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.2.3") ? 0 : 1)'; then
+  echo "This shell runs Ruby $(ruby -e 'print RUBY_VERSION') from $(command -v ruby)." >&2
+  echo "This course needs Ruby 3.2.3 or newer. The Ruby that ships with macOS is too old." >&2
+  echo "On a Mac: brew install ruby, or install rbenv and run rbenv install 3.4.2." >&2
+  exit 1
+fi
 
 if ! command -v bundle >/dev/null 2>&1; then
   gem install bundler
@@ -15,4 +28,4 @@ if [[ ! -f .env ]]; then
 fi
 
 mkdir -p tmp
-echo "Ready. Try: GLASS_BOX_MODE=offline bin/demo 02"
+echo "Ready on Ruby $(ruby -e 'print RUBY_VERSION'). Try: GLASS_BOX_MODE=offline bin/demo 02"

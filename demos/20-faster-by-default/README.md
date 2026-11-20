@@ -8,11 +8,15 @@ This demo prints the four measurements on the RubyLLM 2.1 card and the installed
 GLASS_BOX_MODE=offline bin/demo 20
 ```
 
-You can also run `ruby demos/20-faster-by-default/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
+You can also run `ruby demos/20-faster-by-default/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset and you have set a chat key, the demo runs live.
+
+## What a live run sends
+
+This demo calls no provider in any mode.
 
 ## What to look at
 
-The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
+Read the four rows, each with a measurement and a comparison with RubyLLM 2.0. The line under the card names the installed gem version. The demo measures nothing on your machine, and the last line says so.
 
 Docs: https://rubyllm.com/whats-new-in-2-1/
 

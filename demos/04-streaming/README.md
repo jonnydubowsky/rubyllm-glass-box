@@ -8,11 +8,15 @@ This demo passes a block to `ask` and prints each `chunk.content` as it arrives.
 GLASS_BOX_MODE=offline bin/demo 04
 ```
 
-You can also run `ruby demos/04-streaming/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset, the demo sends its live calls to the provider you have configured, and its other calls still use the fixtures.
+You can also run `ruby demos/04-streaming/run.rb` directly. With `GLASS_BOX_MODE=offline`, the demo uses the test stub and the files in `demos/fixtures`. If you leave the mode unset and you have set a chat key, the demo runs live.
+
+## What a live run sends
+
+A live run sends one streamed chat request to your default chat model.
 
 ## What to look at
 
-The script first prints the mode and the gem version. It then prints the parts of the call that this concept covers, such as the request, the tool calls, the transcript, the cost or the trace. Read those lines first, and then read the model's reply.
+The `chunks:` line fills in one chunk at a time. Offline, each chunk is one word of the haiku, and the stub pauses briefly between words. The cost line prints after the stream ends.
 
 Docs: https://rubyllm.com/streaming/
 

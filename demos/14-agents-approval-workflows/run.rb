@@ -20,13 +20,16 @@ class IssueRefund < RubyLLM::Tool
 end
 
 class SupportAgent < RubyLLM::Agent
-  model "claude-sonnet-5", provider: :anthropic
+  # The tour's agent names claude-sonnet-5. Without an Anthropic key, a live
+  # run uses the default chat model.
+  agent_model, agent_provider = GlassBox.model_for("claude-sonnet-5", :anthropic)
+  model agent_model, provider: agent_provider
   instructions "Resolve billing tickets. Call the refund tool when the customer asks for a refund."
   tools IssueRefund
 end
 
 GlassBox.script_replies(
-  GlassBox.tool_call(:issue_refund, order_id: "42"),
+  GlassBox.tool_call(:issue_refund, order_id: 42),
   cost: 0.0042
 )
 
@@ -52,8 +55,10 @@ RubyLLM.workflow("Billing ticket") do |workflow|
     GlassBox.script_replies "The refund was not issued.", cost: 0.0042
     question.decline("Not approved in this run")
     puts "declined with question.decline"
+    puts
   end
   answer = workflow.step("Continue") { agent.complete }
 end
 GlassBox.log "reply", answer.content
+GlassBox.print_transcript(agent.chat)
 GlassBox.print_cost(agent)

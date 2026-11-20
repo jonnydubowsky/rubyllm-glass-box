@@ -4,7 +4,7 @@
 require_relative "../../lib/glass_box"
 
 GlassBox.boot!
-GlassBox.banner "09  Tool search and an approval"
+GlassBox.banner "09  Tool search and an MCP App approval"
 
 # Gemini's wire format has no provider tool search, so a deferred chat adds
 # RubyLLM's tool_search tool. OpenAI and Anthropic search on the provider side
@@ -35,12 +35,18 @@ GlassBox.script_replies(
   cost: 0.003
 )
 
-chat = GlassBox.watch(
-  GlassBox.chat(model: "gemini-3.7-flash", provider: :gemini)
-    .with_tools(ListTitles, CreateCatalogNote, defer: true)
-)
+base = if GlassBox.provider_configured?(:gemini)
+         GlassBox.chat(model: "gemini-3.7-flash", provider: :gemini)
+       else
+         puts "Gemini is not configured, so this run uses the default chat model."
+         GlassBox.chat
+       end
+chat = GlassBox.watch(base.with_tools(ListTitles, CreateCatalogNote, defer: true))
+GlassBox.log "model", "#{chat.model.id} provider=#{chat.model.provider}"
 GlassBox.log "deferred tools", chat.deferred_tools.keys.inspect
-response = chat.ask "Add a catalog note for The Last Lantern."
+prompt = "Add a catalog note for The Last Lantern."
+GlassBox.log "prompt", prompt
+response = chat.ask prompt
 question = chat.pending_questions.first
 if question
   call = question.tool_call

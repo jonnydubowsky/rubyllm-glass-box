@@ -14,7 +14,9 @@ bin/learn auto
 bin/learn reset
 ```
 
-`bin/learn` runs the next unfinished step and records progress in `tmp/learn/progress.json`. Step 14 publishes a score card, so it waits until you type yes. `bin/learn auto` sets `GLASS_BOX_APPROVE=yes` and runs every step.
+`bin/learn` prints the lesson for the next unfinished step, waits for you to press Enter, runs the step and records progress in `tmp/learn/progress.json`. Step 14 publishes a score card, so it waits until you type yes. `bin/learn auto` sets `GLASS_BOX_APPROVE=yes` and runs every step without the lesson text.
+
+Each lesson has the same sections. "The concept" explains the RubyLLM call. "What this step does" quotes the prompt that the step sends and names the catalog rows it uses. "What to look at" tells you which lines of the output to read. Wherever a reply states a catalog fact, the prompt or a tool result supplies that fact, so in live mode you can check the reply.
 
 The lessons are in `guided/lessons`. The dataset for the score evaluation is `guided/evals/brand_score.yml`, and the catalog is `guided/data/catalog.yml`.
 
